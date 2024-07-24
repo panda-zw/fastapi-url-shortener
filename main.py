@@ -10,17 +10,12 @@ load_dotenv()
 
 app = FastAPI()
 
-# MongoDB connection
-db_url = os.getenv("DB_URL")
-client = MongoClient(db_url)
-db = client.url_shortener
-
 app.include_router(url_router)
 
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://localhost:3000", "https://shortie-six.vercel.app/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

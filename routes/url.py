@@ -4,10 +4,13 @@ from models.url import URL
 from pymongo import MongoClient
 import shortuuid
 from models.url import URL, UrlRequest
+import os
 
 router = APIRouter()
 
-client = MongoClient("mongodb://localhost:27017")
+# MongoDB connection
+db_url = os.getenv("DB_URL")
+client = MongoClient(db_url)
 db = client.url_shortener
 
 
