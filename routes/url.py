@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, Body
 from pydantic import HttpUrl
-from models.url import URL
+from models.url import URL, UrlRequest
 from pymongo import MongoClient
 import shortuuid
-from models.url import URL, UrlRequest
 import os
+from datetime import datetime
 
 router = APIRouter()
 
@@ -23,9 +23,10 @@ async def shorten_url(url_request: UrlRequest = Body(...)):
     if existing_url:
         return URL(**existing_url)
 
-    # Generate a new short URL
+    # Generate a new short URL and set the creation date
     short_url = shortuuid.uuid()[:6]
-    url = URL(original_url=str(original_url), short_url=short_url)
+    created_at = datetime.utcnow()
+    url = URL(original_url=str(original_url), short_url=short_url, created_at=created_at)
 
     # Insert the new URL into the database
     db.urls.insert_one(url.model_dump())
