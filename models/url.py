@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel, HttpUrl
 from datetime import datetime
 
@@ -5,7 +7,7 @@ from datetime import datetime
 class URL(BaseModel):
     original_url: str
     short_url: str
-    created_at: datetime
+    created_at: Optional[datetime] = None
 
 
 class UrlRequest(BaseModel):
