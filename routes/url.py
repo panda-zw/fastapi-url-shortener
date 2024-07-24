@@ -5,6 +5,7 @@ from pymongo import MongoClient
 import shortuuid
 import os
 from datetime import datetime
+from fastapi.responses import RedirectResponse
 
 router = APIRouter()
 
@@ -34,10 +35,10 @@ async def shorten_url(url_request: UrlRequest = Body(...)):
     return url
 
 
-@router.get("/{short_url}", response_model=URL)
+@router.get("/{short_url}")
 async def redirect_url(short_url: str):
     url = db.urls.find_one({"short_url": short_url})
     if url:
-        return URL(**url)
+        return RedirectResponse(url["original_url"])
     else:
         raise HTTPException(status_code=404, detail="URL not found")
